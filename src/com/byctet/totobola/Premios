@@ -1,0 +1,53 @@
+package com.byctet.totobola;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.HashMap;
+
+public class Premios {
+
+  public static void main( String[] args) throws Exception {
+    String fileBetConditions = args[0]; //Ficheiro de condições
+    String fileSaidas        = args[1]; //Ficheiros de chaves saidas
+    String fileBet           = args[2]; //Ficheiros de chaves jogadas
+    String fileResult        = args[3]; //Ficheiro de prémios
+
+    HashMap<String,String> values = GetValues.fromFile( fileBetConditions);
+
+    BufferedReader bs = new BufferedReader( new FileReader( new File( fileSaidas)));
+    BufferedWriter bw = new BufferedWriter( new FileWriter( new File( fileResult)));
+    String lineSaida;
+    while( (lineSaida=bs.readLine())!=null) {
+      int onze=0, doze=0, treze=0;
+      BufferedReader br = new BufferedReader( new FileReader( new File( fileBet)));
+      String lineBet;
+      while( (lineBet=br.readLine())!=null) {
+        int acerto=0;
+        for( int i=0 ; i<lineSaida.length() ; i++) {
+          if( lineSaida.charAt( i)==lineBet.charAt( i)) acerto++;
+        }
+             if( acerto==11) onze++;
+        else if( acerto==12) doze++;
+        else if( acerto==13) treze++;
+      }
+      br.close();
+      boolean ok[] = new boolean[50];
+      char grupo[] = new char[13];
+      char chave[] = new char[13];
+      for( int i=0 ; i<lineSaida.length() ; i++) {
+        chave[i] = lineSaida.charAt( i);
+      }
+      ApplyFilter.filter( grupo, chave, values, bw, ok);
+      bw.write( "Premios\n");
+      bw.write( "Onze =" + onze  + "\n");
+      bw.write( "Doze =" + doze  + "\n");
+      bw.write( "Treze=" + treze + "\n");
+    }
+    bw.close();
+    bs.close();
+  }
+
+}
