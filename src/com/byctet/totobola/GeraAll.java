@@ -21,7 +21,7 @@ public class GeraAll {
   }
 
   public static void main( String[] args) throws Exception {
-    String fileBetConditions = args[0]; //Ficheiro de condiÃ§Ãµes
+    String fileBetConditions = args[0]; //Ficheiro de condições
     String fileResult = args[1]; //Ficheiro de chaves resultantes
     char[][] template;
     HashMap<String,String> values = GetValues.fromFile( fileBetConditions);
